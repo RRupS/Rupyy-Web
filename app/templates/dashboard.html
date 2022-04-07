@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block title %}Rupyy - Dashboard{% endblock %}
+
+{% block body %}
+    <section>
+        <div class="container">
+            <div class="container-header"><h1>Sunucular</h1></div>
+            {% for i in render_guild %}
+                {% if i.owner %}
+                    <div class="card">
+                        {% if i.icon != None %}
+                            <img src="https://cdn.discordapp.com/icons/{{ i.id }}/{{ i.icon }}.png" alt="">
+                        {% else %}
+                            <img src="{{ url_for('static', filename='img/ruppy.png') }}" alt="">
+                        {% endif %}
+                        <div class="name">{{ i.name }}</div>
+                        {{ i.id }}
+                        <a href="/dashboard/manage-server/{{ i.id }}" class="button"><i class="fas fa-cog"></i> Yönet</a>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </section>
+{% endblock %}

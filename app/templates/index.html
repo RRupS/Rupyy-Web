@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block title %}Rupyy{% endblock %}
+
+{% block body %}
+    <section>
+        <div class="banner">
+            <div class="banner-section">
+                <img src="{{ url_for('static', filename='img/ruppy.png') }}" alt="">
+            </div>
+            <div class="banner-section">
+                <div class="bot-description">Türkçe Sunucu Tanıtım Platformu</div>
+                <div class="bot-name">Rupyy</div>
+                <a href="https://discord.com/oauth2/authorize?client_id=952132822460690442&scope=bot&permissions=27648860222" class="add-bot" target="_blank"><i class="fa-solid fa-plus"></i> Botu Ekle</a>
+            </div>
+        </div>
+        <div class="container">
+            <div class="container-header">
+                <h1>En Aktif 10 Sunucu</h1>
+            </div>
+            {% for index, guild in enumerate(guilds, start=1) %}
+                {% if index < 11 %}
+                    <div class="card">
+                        <img src="https://cdn.discordapp.com/icons/{{ guild[0] }}/{{ guild_icons[str(guild[0])] }}.png" alt="">
+                        <div class="rank">#{{ index }}</div>
+                        <div class="name">{{ guild_names[str(guild[0])] }}</div>
+                        <div class="xp"><i class="fa-solid fa-star"></i> {{ '{guild:,}'.format(guild=guild[1]) }}</div>
+                        <div class="description">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Perferendis, quo.</div>
+                        <a href="/server/{{ guild[0] }}" class="button"><i class="fa-solid fa-eye"></i> Görüntüle</a>
+                        {% if get_guild_settings(guild[0]).invite_link %}
+                            <a href="https://discord.gg/{{ get_guild_settings(guild[0]).invite_link }}" class="button"><i class="fa-brands fa-discord"></i> Katıl</a>
+                        {% else %}
+                            <div class="disabled-button"><i class="fa-brands fa-discord"></i> Katıl</div>
+                        {% endif %}
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+        <div class="container">
+            <div class="container-header">
+                <h1>Kadro</h1>
+            </div>
+            {% for i in staff_list %}
+                <div class="user-card">
+                    {% if i.user.avatar %}
+                        <img src="https://cdn.discordapp.com/avatars/{{ i.user.id }}/{{ i.user.avatar }}.png">
+                    {% else %}
+                        <img src="https://www.pikpng.com/pngl/b/75-756814_login-user-imagen-user-png-clipart.png">
+                    {% endif %}
+                        <div class="name">{{ i.user.username }}#{{ i.user.discriminator }}</div>
+                    <div class="role"><font color="{{ hex(i.highest_role_color) }}">{{ i.highest_role }}</font></div>
+                </div>
+            {% endfor %}
+        </div>
+    </section>
+{% endblock %}

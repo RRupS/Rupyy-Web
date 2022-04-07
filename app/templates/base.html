@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <title>{% block title %}Rupyy{% endblock %}</title>
+
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+        <link rel="shortcut icon" type="image/png" href="{{ url_for('static', filename='img/ruppy.png') }}"/>
+
+        <script src="https://kit.fontawesome.com/8ee43108fc.js" crossorigin="anonymous"></script>
+    </head>
+    <body>
+        <header>
+            <a href="/"><img src="{{ url_for('static', filename='img/ruppy.png') }}" alt="" height="100px"></a>
+            {% if user %}
+                <script>
+                    let x = 0
+        
+                    function userMenu() {
+                        if (x === 0) {
+                            document.getElementById('user-button').innerHTML = '<img src="https://cdn.discordapp.com/avatars/{{ user.id }}/{{ user.avatar }}.png" alt=""> {{ user.username }} <i class="fa-solid fa-caret-up"></i>';
+                            document.getElementById('user-menu').style.display = 'block';
+                            x = 1;
+                        }
+                        else {
+                            document.getElementById('user-button').innerHTML = '<img src="https://cdn.discordapp.com/avatars/{{ user.id }}/{{ user.avatar }}.png" alt=""> {{ user.username }} <i class="fa-solid fa-caret-down"></i>';
+                            document.getElementById('user-menu').style.display = 'none';
+                            x = 0;
+                        }
+                    }
+                </script>
+                <button id="user-button" onclick="userMenu()"><img src="https://cdn.discordapp.com/avatars/{{ user.id }}/{{ user.avatar }}.png" alt=""> {{ user.username }} <i class="fa-solid fa-caret-down"></i></button>
+            {% else %}
+                <a href="{{ oauth_url }}" class="link-button"><i class="fa-solid fa-arrow-right-to-bracket"></i> Giriş Yap</a>
+            {% endif %}
+        </header>
+        <div id="user-menu">
+            <a href="/dashboard">Yönetim Paneli</a>
+            <a href="/logout">Çıkış Yap</a>
+        </div>
+        <nav>
+        </nav>
+        {% block body %}
+
+        {% endblock %}
+        <footer>
+            <div class="footer-container">
+                <img src="{{ url_for('static', filename='img/ruppy-footer.png') }}" alt="" width="90%">
+            </div>
+            <div class="footer-container">
+                <h1>Destek Sunucusu</h1>
+                Destek sunucumuza gelerek bot ile ilgili her türlü yardımı alabilirsiniz. Ayrıca öneri gibi durumlarda da  bizimle bire bir iletişime geçerek botun gelişmesine katkı sağlayabilirsiniz.
+                <a href="https://discord.gg/Wg8hEFKnyx" class="button"><i class="fa-brands fa-discord"></i> Destek Sunucusu</a>
+            </div>
+        </footer>
+    </body>
+</html>

@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+
+{% block title %}Rupyy - Dashboard - {{ guild.name }}{% endblock %}
+
+{% block body %}
+    <section>
+        <form class="manage-server-form" action="" method="POST" autocomplete="off" spellcheck="false">
+            <div class="server-page-container">
+                <div class="server-page-container-section">
+                    <img src="https://cdn.discordapp.com/icons/{{ guild.id }}/{{ guild.icon }}.png" alt="">
+                    <h2 style="font-size: 30px;">{{ guild.name }}</h2>
+                    <div class="manage-server-form-area">
+                        <label>Sunucu Açıklaması</label>
+                        <textarea name="description">{{ guild_description }}</textarea>
+                    </div>
+                </div>
+                <div class="server-page-container-section">
+                    <a href="/dashboard" class="button"><i class="fa-solid fa-circle-arrow-left"></i> Yönetim Paneline Dön</a>
+                    <input type="submit" class="button" value="Kaydet">
+                    <div class="xp" style="margin-top: 110px;">
+                        <div class="xp-section2">Yetkililer</div>
+                        <div class="xp-section2">
+                            <label class="switch">
+                                {% if guild_settings.staff_list == 1 %}
+                                    <input type="checkbox" name="staff_list" checked>
+                                {% else %}
+                                    <input type="checkbox" name="staff_list">
+                                {% endif %}
+                                <span class="slider round"></span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="xp">
+                        <div class="xp-section2">Top10</div>
+                        <div class="xp-section2">
+                            <label class="switch">
+                                {% if guild_settings.top10 == 1 %}
+                                    <input type="checkbox" name="top10" checked>
+                                {% else %}
+                                    <input type="checkbox" name="top10">
+                                {% endif %}
+                                <span class="slider round"></span>
+                            </label>
+                        </div>
+                    </div>
+                    <h1>Sunucu Davet Linki</h1>
+                    {% if guild_settings.invite_link %}
+                        discord.gg/<input type="text" name="invite_link" value="{{ guild_settings.invite_link }}">
+                    {% else %}
+                        discord.gg/<input type="text" name="invite_link">
+                    {% endif %}
+                    {% if guild_settings.staff_list == 1 %}
+                        <h1>Yetkili Rol ID</h1>
+                        <input type="text" name="staff_role_id" value="{{ guild_settings.staff_role_id }}">
+                    {% endif %}
+                    <h1>Kategoriler</h1>
+                    {% for i, category in enumerate(guild_categories, start=1) %}
+                        {% if category in guild_settings.categories %}
+                            <div class="checkbox">
+                                <input type="checkbox" id="checkbox{{ i }}" name="category" value="{{ category }}" checked>
+                                <label for="checkbox{{ i }}"><span>{{ category }}</span></label>
+                            </div>
+                        {% else %}
+                            <div class="checkbox">
+                                <input type="checkbox" id="checkbox{{ i }}" name="category" value="{{ category }}">
+                                <label for="checkbox{{ i }}"><span>{{ category }}</span></label>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </form>
+    </section>
+{% endblock %}

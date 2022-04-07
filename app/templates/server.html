@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+
+{% block title %}Rupyy - {{ guild.name }}{% endblock %}
+
+{% block body %}
+    <section>
+        <div class="server-page-container">
+            <div class="server-page-container-section">
+                <img src="https://cdn.discordapp.com/icons/{{ guild.id }}/{{ guild.icon }}.png" alt="">
+                <h2>{{ guild.name }}</h2>
+                {% if guild_settings.invite_link %}
+                    <a href="https://discord.gg/{{ guild_settings.invite_link }}" class="button"><i class="fa-brands fa-discord"></i> Katıl</a>
+                {% else %}
+                    <div class="disabled-button"><i class="fa-brands fa-discord"></i> Katıl</div>
+                {% endif %}
+                <a href="#" class="button"><i class="fa-solid fa-thumbs-up"></i> Oyla</a>
+                <a href="#" class="button"><i class="fa-solid fa-triangle-exclamation"></i> Raporla</a>
+                <div class="server-description">
+                    <textarea readonly>{{ guild_description }}</textarea>
+                </div>
+            </div>
+            <div class="server-page-container-section">
+                {% if guild_settings.categories != ['0'] and guild_settings.categories != ['']  %}
+                    <h1>Kategoriler</h1>
+                    {% for category in guild_settings.categories %}
+                        <div class="tag">{{ category }}</div>
+                    {% endfor %}
+                {% endif %}
+
+                <h1>Sunucu Puanlaması</h1>
+                <div class="xp">
+                    <div class="xp-section">Genel</div>
+                    <div class="xp-section"><i class="fa-solid fa-star"></i> {{ '{xp:,}'.format(xp=guild_xp.general) }}</div>
+                </div>
+                <div class="xp">
+                    <div class="xp-section">Aylık</div>
+                    <div class="xp-section"><i class="fa-solid fa-star"></i> {{ '{xp:,}'.format(xp=guild_xp.monthly) }}</div>
+                </div>
+                <div class="xp">
+                    <div class="xp-section">Haftalık</div>
+                    <div class="xp-section"><i class="fa-solid fa-star"></i> {{ '{xp:,}'.format(xp=guild_xp.weekly) }}</div>
+                </div>
+                <div class="xp">
+                    <div class="xp-section">Günlük</div>
+                    <div class="xp-section"><i class="fa-solid fa-star"></i> {{ '{xp:,}'.format(xp=guild_xp.daily) }}</div>
+                </div>
+
+                <h1>Sahipler</h1>
+                <div class="top10-user-card">
+                    <img src="https://cdn.discordapp.com/avatars/{{ guild.owner_id }}/{{ user_avatars[guild.owner_id] }}.png" width="100px">
+                    <div class="name">{{ user_names[guild.owner_id] }}#{{ user_discriminators[guild.owner_id] }}</div>
+                </div>
+
+                {% if guild_settings.top10 == 1 %}
+                    <h1>En Aktif 10 Üye</h1>
+                    {% for index, user in enumerate(guild_top10, start=1) %}
+                        {% if index < 11 %}
+                        <div class="top10-user-card">
+                            <img src="https://cdn.discordapp.com/avatars/{{ user[0] }}/{{ user_avatars[user[0]] }}.png" alt="">
+                            <div class="name">{{ user_names[user[0]] }}#{{ user_discriminators[user[0]] }}</div>
+                            <div class="user-xp"><i class="fa-solid fa-star"></i> {{ '{xp:,}'.format(xp=json.loads(user[2])[guild.id]) }}</div>
+                            <div class="rank">#{{ index }}</div>
+                        </div>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+                {% if guild_settings.staff_list == 1 %}
+                    <h1>Yetkili Kadrosu</h1>
+                    {% for i in staff_list %}
+                        <div class="top10-user-card">
+                            {% if i.user.avatar %}
+                                <img src="https://cdn.discordapp.com/avatars/{{ i.user.id }}/{{ i.user.avatar }}.png">
+                            {% else %}
+                                <img src="https://icon-library.com/images/default-profile-icon/default-profile-icon-24.jpg">
+                            {% endif %}
+                            <div class="name">{{ i.user.username }}#{{ i.user.discriminator }}</div>
+                            <div class="user-xp"><font color="#{{ hex(i.highest_role_color)[2:] }}">{{ i.highest_role }}</font></div>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            </div>
+        </div>
+    </section>
+{% endblock %}
